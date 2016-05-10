@@ -1,20 +1,23 @@
 from math import sqrt
+import itertools as it
 
 
 def sieve(upperBound):
     """
     Searches a range of natural numbers and returns the primes values.
 
+    Tiphat: cds-amal
+
     :param upperBound:  indicates the upper limit of numbers to search
     :return:            the found prime values
     """
 
     upperBoundSquareRoot = int(sqrt(upperBound))
-    # add 1 to upperBound as we're counting from 0
-    isComposite = [False for i in range(1, upperBound+2)]
-    for m in range(2, upperBoundSquareRoot + 1):
-        if not isComposite[m]:
+    primes = [False, False] + [True] * upperBound
+    for m in it.chain([2], range(3, upperBoundSquareRoot + 1)):
+        if primes[m]:
             for k in range(m * m, upperBound+1, m):
-                isComposite[k] = True
+                primes[k] = False
 
-    return [m for m in range(2, upperBound+1) if not isComposite[m]]
+    return list(it.compress(range(upperBound+1), primes))
+
