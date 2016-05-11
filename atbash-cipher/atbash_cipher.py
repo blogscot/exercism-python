@@ -1,7 +1,6 @@
 from string import lowercase, maketrans, punctuation
 
-alphabet = lowercase
-tebahpla = lowercase[::-1]
+translations = maketrans(lowercase, lowercase[::-1])
 CHUNK = 5
 
 
@@ -10,20 +9,17 @@ def filter_punctuation(sentence):
 
 
 def chunk(sentence, size=CHUNK):
-    if len(sentence) <= size:
-        return sentence
-
-    return sentence[:size] + " " + chunk(sentence[size:])
+    return ' '.join([sentence[i:i+5] for i in range(0, len(sentence), size)])
 
 
 def encode(seq):
     seq = seq.lower().replace(" ", "")
-    seq = filter_punctuation(seq).translate(maketrans(alphabet, tebahpla))
+    seq = filter_punctuation(seq).translate(translations)
     return chunk(seq)
 
 
 def decode(seq):
     return (seq
             .replace(" ", "")
-            .translate(maketrans(tebahpla, alphabet)))
+            .translate(translations))
 
