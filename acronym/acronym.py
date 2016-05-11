@@ -1,7 +1,6 @@
-from itertools import starmap
 from re import findall
 
 
 def abbreviate(title):
-    words = findall(r"(\b\w)|(?:[a-z])([A-Z])\B", title)
-    return ''.join(list(starmap(lambda x, y: x+y, words))).upper()
+    words = findall(r"[A-Z]+[a-z]*|[a-z]+", title)
+    return ''.join([word[0] for word in words]).upper()
