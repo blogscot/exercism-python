@@ -1,4 +1,4 @@
-from itertools import chain, starmap
+from itertools import chain
 
 a = '''one two three four five six seven eight nine ten
     eleven twelve thirteen fourteen fifteen sixteen seventeen
@@ -56,23 +56,24 @@ def say(number):
 
     output = ""
 
-    if lst['hundred']:
-        output = lst['hundred']
-    if 'thousand' in lst and lst['thousand']:
-        if output:
-            output = lst['thousand'] + " thousand " + output
-        else:
-            output = lst['thousand'] + " thousand"
+    if 'billion' in lst and lst['billion']:
+        output = lst['billion'] + " billion"
     if 'million' in lst and lst['million']:
         if output:
-            output = lst['million'] + " million " + output
+            output += " " + lst['million'] + " million"
         else:
             output = lst['million'] + " million"
-    if 'billion' in lst and lst['billion']:
+    if 'thousand' in lst and lst['thousand']:
         if output:
-            output = lst['billion'] + " billion " + output
+            output += " " + lst['thousand'] + " thousand"
         else:
-            output = lst['billion'] + " billion"
+            output = lst['thousand'] + " thousand"
+    if lst['hundred']:
+        if output:
+            output += " "
+            if 'hundred' not in lst['hundred']:
+                output += "and "
+        output += lst['hundred']
 
     return output
 
