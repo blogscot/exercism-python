@@ -9,7 +9,7 @@ def filter_punctuation(sentence):
 
 
 def chunk(sentence, size=CHUNK):
-    return ' '.join([sentence[i:i+5] for i in range(0, len(sentence), size)])
+    return ' '.join([sentence[i:i+size] for i in range(0, len(sentence), size)])
 
 
 def encode(seq):
