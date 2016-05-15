@@ -10,6 +10,14 @@ nums = dict(zip(b, a))
 
 
 def split_number(number, size=3):
+    """
+    Split number into 3-digit chunks
+
+    :param number:      number to split
+    :param size:        chunk size
+    :return:            list of chunks (billions, millions etc.)
+    """
+
     string = str(number)
     return [int(string[::-1][i:i + size][::-1]) for i in range(0, len(string), size)]
 
@@ -22,29 +30,71 @@ def hundreds(num):
     return num/100*100
 
 
-def parse_number(number, result=""):
+def parse_number(number, acc=""):
+    """
+    Convert a number in the range 1,999 into text
+
+    :param number:      number to convert
+    :param acc:         accumulator, used for recursion
+    :return:            textual number
+    """
 
     if number == 0:
-        return result
+        return acc
 
     if 100 <= number < 1000:
-        result += nums[number / 100] + " hundred"
+        acc += nums[number / 100] + " hundred"
         number -= hundreds(number)
         if number:
-            result += " and "
+            acc += " and "
     elif 20 < number < 100:
-        result += nums[tens(number)]
+        acc += nums[tens(number)]
         number -= tens(number)
         if number:
-            result += '-'
+            acc += '-'
     else:
-        result += nums[number]
+        acc += nums[number]
         number = 0
 
-    return parse_number(number, result)
+    return parse_number(number, acc)
+
+
+def build_number(lst):
+    """
+    Constructs a number string from the dictionary of parts
+
+    :param lst:     dictionary containing billions, millions etc.
+    :return:        full number string
+    """
+
+    output = ""
+    if 'billion' in lst:
+        output = lst['billion'] + " billion"
+    if 'million' in lst and lst['million']:
+        if output:
+            output += " "
+        output += lst['million'] + " million"
+    if 'thousand' in lst and lst['thousand']:
+        if output:
+            output += " "
+        output += lst['thousand'] + " thousand"
+    if lst['hundred']:
+        if output:
+            output += " "
+            if 'hundred' not in lst['hundred']:
+                output += "and "
+        output += lst['hundred']
+    return output
 
 
 def say(number):
+    """
+    Converts a number in range 1, 1e12-1 to text
+
+    :param number:          number to convert
+    :return:                number as text
+    """
+
     number = int(number)
     if number == 0:
         return "zero"
@@ -54,26 +104,7 @@ def say(number):
     lst = [parse_number(n) for n in split_number(number)]
     lst = dict(zip(['hundred', 'thousand', 'million', 'billion'], lst))
 
-    output = ""
+    return build_number(lst)
 
-    if 'billion' in lst and lst['billion']:
-        output = lst['billion'] + " billion"
-    if 'million' in lst and lst['million']:
-        if output:
-            output += " " + lst['million'] + " million"
-        else:
-            output = lst['million'] + " million"
-    if 'thousand' in lst and lst['thousand']:
-        if output:
-            output += " " + lst['thousand'] + " thousand"
-        else:
-            output = lst['thousand'] + " thousand"
-    if lst['hundred']:
-        if output:
-            output += " "
-            if 'hundred' not in lst['hundred']:
-                output += "and "
-        output += lst['hundred']
 
-    return output
 
