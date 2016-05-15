@@ -10,6 +10,8 @@ class Robot:
     def __init__(self, bearing=NORTH, x_pos=0, y_pos=0):
         self.coordinates = x_pos, y_pos
         self.bearing = bearing
+        self.move = {NORTH: (0, 1), EAST: (1, 0),
+                     SOUTH: (0, -1), WEST: (-1, 0)}
 
     def turn(self, direction):
         self.bearing = (self.bearing + direction + 4) % 4
@@ -21,30 +23,12 @@ class Robot:
         self.turn(1)
 
     def advance(self):
-        {NORTH: self.move_north,
-         EAST: self.move_east,
-         SOUTH: self.move_south,
-         WEST: self.move_west}[self.bearing]()
+        self.coordinates = tuple(map(sum, zip(self.coordinates,
+                                              self.move[self.bearing])))
 
     def simulate(self, seq):
         for action in seq:
             {'R': self.turn_right,
              'L': self.turn_left,
              'A': self.advance}[action]()
-
-    def move_north(self):
-        x, y = self.coordinates
-        self.coordinates = x, y + 1
-
-    def move_east(self):
-        x, y = self.coordinates
-        self.coordinates = x + 1, y
-
-    def move_south(self):
-        x, y = self.coordinates
-        self.coordinates = x, y - 1
-
-    def move_west(self):
-        x, y = self.coordinates
-        self.coordinates = x - 1, y
 

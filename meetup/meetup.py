@@ -15,7 +15,7 @@ order_list = {"1st": 0, "2nd": 1, "3rd": 2, "4th": 3, "5th": 4, "last": -1}
 
 
 def weekdays(offset=0):
-    """ A infinite weekday generator """
+    """ An infinite weekday generator """
     day = offset
     while True:
         yield days[day]
