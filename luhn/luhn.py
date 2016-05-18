@@ -5,7 +5,7 @@ class Luhn:
     @staticmethod
     def _luhnify(num):
         seq = [1 if n % 2 == 0 else 2 for n in range(len(str(num)))][::-1]
-        l0 = map(lambda x: int(x), list(str(num)))
+        l0 = [int(n) for n in str(num)]
         l1 = map(lambda x, y: x * y, l0, seq)
         return map(lambda x: x if x < 10 else x - 9, l1)
 
@@ -27,4 +27,5 @@ class Luhn:
 
     def is_valid(self):
         return self._checksum % 10 == 0
+
 
